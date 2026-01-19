@@ -167,8 +167,9 @@ const ContributionTable: React.FC<ContributionTableProps> = ({
       {/* TABLE */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-slate-100">
+        <thead className="bg-slate-100">
             <tr>
+              <th className="p-4 text-center font-black uppercase text-xs w-12">#</th>
               <th className="p-4 text-left font-black uppercase text-xs">Member</th>
               {enabledMonths.map(m => (
                 <th key={m} className="p-4 text-center font-black text-xs">{m}</th>
@@ -178,8 +179,11 @@ const ContributionTable: React.FC<ContributionTableProps> = ({
           </thead>
 
           <tbody>
-            {members.map(member => (
+            {members.map((member, index) => (
               <tr key={member.id} className="border-t hover:bg-slate-50">
+                <td className="p-4 text-center font-black text-slate-500">
+                  {index + 1}
+                </td>
                 <td className="p-4 font-bold">{member.name}</td>
 
                 {enabledMonths.map(month => {
@@ -227,6 +231,7 @@ const ContributionTable: React.FC<ContributionTableProps> = ({
 
           <tfoot className="bg-slate-900 text-white">
             <tr>
+              <td className="p-4"></td>
               <td className="p-4 font-black">GRAND TOTAL</td>
               {enabledMonths.map(m => (
                 <td key={m} className="p-4 text-center font-black">
