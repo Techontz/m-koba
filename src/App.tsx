@@ -17,7 +17,7 @@ const App: React.FC = () => {
   const [authUser, setAuthUser] = useState<SupabaseUser | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState<Profile | null>(null)
-  const [loginIdentifier, setLoginIdentifier] = useState('admin@mkoba.com');
+  const [loginIdentifier, setLoginIdentifier] = useState('agape@mkoba.com');
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [periods, setPeriods] = useState<ContributionPeriod[]>([]);
   const [selectedPeriodId, setSelectedPeriodId] = useState<string | null>(null);
@@ -151,18 +151,27 @@ const App: React.FC = () => {
   
   useEffect(() => {
     if (!authUser) {
-      setUser(null)
-      return
+      setUser(null);
+      return;
     }
   
-    setUser({
-      id: authUser.id,
-      full_name: authUser.email ?? 'User',
-      role: 'mwenyekiti', // TEMPORARY (we’ll fetch from DB next)
-      phone: '',
-      created_at: authUser.created_at ?? new Date().toISOString()
-    })
-  }, [authUser])
+    const loadProfile = async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, role, phone, created_at')
+        .eq('id', authUser.id)
+        .single();
+  
+      if (error) {
+        console.error('PROFILE LOAD ERROR:', error);
+        return;
+      }
+  
+      setUser(data);
+    };
+  
+    loadProfile();
+  }, [authUser]);
   
   useEffect(() => {
     if (!authUser) return;
